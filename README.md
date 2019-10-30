@@ -1,6 +1,8 @@
 # Simple unison utils
 
-Contains following functions
+Install: `pull https://github.com/Nipsuli/unison-utils .utils`
+
+Has namespace `utils` containing following functions
 ```
 Text.split : Text -> Text -> List Text
 
