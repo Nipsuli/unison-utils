@@ -1,0 +1,96 @@
+---
+use .base
+-- namespace utils
+
+Text.split : Text -> Text -> List Text
+Text.split splitter text =
+
+  splitInner : List Char -> List Char -> List Char -> List (List Char)
+  splitInner splitter rest carry =
+    case (rest, carry) of
+      ([], []) -> []
+      ([], c) -> [c]
+      _  -> spLen = List.size splitter
+            case (List.take spLen rest == splitter, carry) of
+              (true, []) -> splitInner splitter (List.drop spLen rest) []
+              (true, c) -> c +: splitInner splitter (List.drop spLen rest) []
+              _ -> case head rest of
+                     Optional.Some r -> splitInner splitter (tail rest) (carry :+ r)
+                     Optional.None -> [carry]
+
+  sp = Text.toCharList splitter
+  rest = Text.toCharList text
+  map Text.fromCharList (splitInner sp rest [])
+
+test> tests.Text.split.simpleSplit1 = run (expect ((Text.split "\s" "foo bar") == ["foo", "bar"]))
+test> tests.Text.split.simpleSplit2 = run (expect ((Text.split "\s" "foo bar baz") == ["foo", "bar", "baz"]))
+test> tests.Text.split.multiCharSplit = run (expect ((Text.split "foo" "bazfoobar") == ["baz", "bar"]))
+test> tests.Text.split.trailingSplitMark = run (expect ((Text.split "\s" "foo ") == ["foo"]))
+test> tests.Text.split.startingSplitMark = run (expect ((Text.split "\s" " foo") == ["foo"]))
+test> tests.Text.split.multipleSequentalSplitMarks = run (expect ((Text.split "\s" "foo    bar") == ["foo", "bar"]))
+
+Text.join : Text -> List Text -> Text
+Text.join joiner l =
+  case List.uncons l of
+    Optional.None -> ""
+    Optional.Some (h, t) -> List.foldl (acc cur -> acc Text.++ joiner Text.++ cur) h t
+
+test> tests.Text.join.listHasItems = run (expect ((Text.join " " ["foo", "bar"]) == "foo bar"))
+test> tests.Text.join.emptyList = run (expect ((Text.join " " []) == ""))
+
+Text.toBytes : Text -> Bytes
+Text.toBytes t =
+  c = Text.toCharList t
+  n = List.map Char.toNat c
+  Bytes.fromList n
+
+Text.fromBytes : Bytes -> Text
+Text.fromBytes b =
+  n = Bytes.toList b
+  c = List.map Char.fromNat n
+  Text.fromCharList c
+
+test> tests.Text.toBytes.ex1 = run (expect ((Bytes.fromList [102, 111, 111]) == (Text.toBytes "foo")))
+test> tests.Text.fromBytes.ex3 = run (expect ((Text.fromBytes (Bytes.fromList [102, 111, 111])) == "foo"))
+test> tests.Text.fromBytes.ex4 = run (expect ((Text.fromBytes (Text.toBytes "foo")) == "foo"))
+
+
+Text.length : Text -> Nat
+Text.length t = List.size (Text.toCharList t)
+
+test> tests.Text.length.ex1 = run (expect (Text.length "" == 0))
+test> tests.Text.length.ex2 = run (expect (Text.length "foobar" == 6))
+test> tests.Text.length.ex3 = run (expect (Text.length "foobär" == 6))
+
+
+Text.startsWith : Text -> Text -> Boolean
+Text.startsWith needle haystack =
+  case ((Text.length haystack) > (Text.length needle)) of
+    true -> ((Text.take (Text.length needle) haystack) == needle)
+    _ -> false
+
+test> tests.Text.startsWith.ex1 = run (expect (Text.startsWith "foobar" "foo" == false))
+test> tests.Text.startsWith.ex2 = run (expect (Text.startsWith "foo" "foobar" == true))
+test> tests.Text.startsWith.ex3 = run (expect (Text.startsWith "bar" "foobar" == false))
+
+
+List.first : List t -> List t
+List.first = List.take 1
+
+List.head : List t -> Optional t
+List.head l =
+  case List.first l of
+      [a] -> Optional.Some a
+      [] -> None
+
+test> tests.List.head.emptyList = run (expect (List.head [] == Optional.None))
+test> tests.List.head.singleItemList = run (expect (List.head ["foo"] == Optional.Some "foo"))
+test> tests.List.head.multiItemList = run (expect (List.head ["bar", "foo"] == Optional.Some "bar"))
+
+List.tail : List t -> List t
+List.tail = List.drop 1
+
+test> tests.List.tail.emptyList = run (expect (List.tail [] == []))
+test> tests.List.tail.singleItemList = run (expect (List.tail ["foo"] == []))
+test> tests.List.tail.multiItemList1 = run (expect (List.tail ["bar", "foo"] == ["foo"]))
+test> tests.List.tail.multiItemList2 = run (expect (List.tail ["bar", "foo", "baz"] == ["foo", "baz"]))
