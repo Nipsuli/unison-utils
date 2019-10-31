@@ -2,6 +2,8 @@
 
 Install: `pull https://github.com/Nipsuli/unison-utils .utils`
 
+Check: [unisonlibraries](https://github.com/runarorama/unisonlibraries)
+
 Has namespace `utils` containing following functions
 ``` Idris
 Text.split : Text -> Text -> List Text
