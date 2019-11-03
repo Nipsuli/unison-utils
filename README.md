@@ -4,15 +4,16 @@ Install: `pull https://github.com/Nipsuli/unison-utils .utils`
 
 Check: [unisonlibraries](https://github.com/runarorama/unisonlibraries)
 
+
 Has namespace `utils` containing following functions
 ``` Idris
-Text.split : Text -> Text -> List Text
-Text.join : Text -> List Text -> Text
-Text.toBytes : Text -> Bytes
+Text.cons : Char -> Text -> Text
 Text.fromBytes : Bytes -> Text
+Text.join : Text -> [Text] -> Text
 Text.length : Text -> Nat
+Text.snoc : Text -> Char -> Text
+Text.split : Text -> Text -> [Text]
+Text.split1 : Text -> Text -> [Text]
 Text.startsWith : Text -> Text -> Boolean
-List.first : List t -> List t
-List.head : List t -> Optional t
-List.tail : List t -> List t
+Text.toBytes : Text -> Bytes
 ```
