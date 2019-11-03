@@ -13,7 +13,7 @@ Text.join : Text -> [Text] -> Text
 Text.length : Text -> Nat
 Text.snoc : Text -> Char -> Text
 Text.split : Text -> Text -> [Text]
-Text.split1 : Text -> Text -> [Text]
+Text.splitOnce : Text -> Text -> [Text]
 Text.startsWith : Text -> Text -> Boolean
 Text.toBytes : Text -> Bytes
 ```
