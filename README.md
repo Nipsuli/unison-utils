@@ -1,4 +1,4 @@
-# Simple unison utils
+# Simple unison (text) utils
 
 Install: `pull https://github.com/Nipsuli/unison-utils .utils`
 
