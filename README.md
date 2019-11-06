@@ -17,7 +17,7 @@ Text.split : Text -> Text -> [Text]
 Text.splitOnce : Text -> Text -> [Text]
 Text.startsWith : Text -> Text -> Boolean
 Text.toBytes : Text -> Bytes
-Text.trim : Text -> Text
+Text.trimWhiteSpace : Text -> Text
 ```
 
 
