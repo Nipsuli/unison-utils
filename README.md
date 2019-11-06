@@ -17,7 +17,10 @@ Text.split : Text -> Text -> [Text]
 Text.splitOnce : Text -> Text -> [Text]
 Text.startsWith : Text -> Text -> Boolean
 Text.toBytes : Text -> Bytes
+Text.trim : Set .base.Char -> Text -> Text
 Text.trimWhiteSpace : Text -> Text
+Text.triml : Set .base.Char -> Text -> Text
+Text.trimr : Set .base.Char -> Text -> Text
 ```
 
 
